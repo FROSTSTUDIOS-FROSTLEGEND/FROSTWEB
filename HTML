@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice & Fire Magic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header with moons -->
+    <header>
+        <img src="moon_ice.png" alt="Ice Moon" class="moon left">
+        <h1>Ice & Fire</h1>
+        <img src="moon_fire.png" alt="Fire Moon" class="moon right">
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="image-container">
+            <img src="ice_fire.png" alt="Ice and Fire" class="main-image">
+            <div class="particles" id="particles"></div>
+        </div>
+        <p id="magic-text">Click the button to unleash the magic!</p>
+        <button id="magic-button">Activate!</button>
+    </main>
+
+    <footer>
+        <p>Created by You 🌑🔥❄️</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #000022, #220000);
+    color: white;
+    text-align: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin: 0 20px;
+    text-shadow: 0 0 10px #fff;
+}
+
+/* Moons */
+.moon {
+    width: 80px;
+    animation: glow 2s infinite alternate;
+}
+
+.moon.left { transform: rotate(-10deg); }
+.moon.right { transform: rotate(10deg); }
+
+@keyframes glow {
+    0% { filter: drop-shadow(0 0 5px #fff);}
+    100% { filter: drop-shadow(0 0 25px #fff);}
+}
+
+/* Main Section */
+main { margin-top: 40px; }
+
+.image-container { position: relative; display: inline-block; }
+
+.main-image {
+    width: 400px;
+    border: 3px solid white;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #fff;
+    transition: transform 0.3s;
+}
+
+.main-image:hover {
+    transform: rotate(-3deg) scale(1.05);
+}
+
+/* Particles */
+.particles {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* Magic Text */
+#magic-text { margin: 20px; font-size: 1.5rem; }
+
+/* Button */
+button {
+    padding: 12px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    background: linear-gradient(to right, #00f, #f00);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    transition: transform 0.2s;
+}
+
+button:hover { transform: scale(1.1); }
+
+/* Footer */
+footer { margin-top: 40px; font-size: 0.9rem; color: #ccc; }
+const button = document.getElementById('magic-button');
+const text = document.getElementById('magic-text');
+const body = document.body;
+const particlesContainer = document.getElementById('particles');
+
+// Particle creation function
+function createParticle(type) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+
+    // Random size and position
+    const size = Math.random() * 10 + 5; // 5px to 15px
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+    particle.style.position = 'absolute';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.top = '50%';
+    particle.style.borderRadius = '50%';
+    particle.style.opacity = 1;
+
+    if(type === 'fire') {
+        particle.style.background = 'orange';
+    } else {
+        particle.style.background = 'cyan';
+    }
+
+    particlesContainer.appendChild(particle);
+
+    // Animate particle upwards and fade out
+    let pos = 50;
+    let opacity = 1;
+    const interval = setInterval(() => {
+        pos -= 1 + Math.random() * 2;
+        opacity -= 0.02;
+        particle.style.top = pos + '%';
+        particle.style.opacity = opacity;
+        if(opacity <= 0) {
+            particle.remove();
+            clearInterval(interval);
+        }
+    }, 16);
+}
+
+// Button click effect
+button.addEventListener('click', () => {
+    text.innerHTML = "🔥❄️ Magic Unleashed! ❄️🔥";
+    body.style.background = "linear-gradient(to bottom, #0033ff, #ff3300)";
+
+    // Spawn multiple particles
+    for(let i = 0; i < 30; i++) {
+        createParticle('fire');
+        createParticle('ice');
+    }
+});
